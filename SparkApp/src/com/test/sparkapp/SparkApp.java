@@ -15,7 +15,7 @@ import org.apache.spark.streaming.api.java.JavaStreamingContext;
 public class SparkApp {
 	public static void main(String[] args) {
 		
-		String namenode = String.format("tcp://%s:50070", System.getenv("NAMENODE_SERVICE_HOST"));
+		String namenode = String.format("hdfs://%s:50070", System.getenv("NAMENODE_SERVICE_HOST"));
 		
 		Configuration configuration = new Configuration();
 		try {

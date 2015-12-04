@@ -19,12 +19,13 @@ import org.apache.spark.streaming.api.java.JavaStreamingContext;
 public class SparkApp {
 	public static void main(String[] args) {
 		
-		final String namenode = String.format("hdfs://%s:50070", System.getenv("NAMENODE_SERVICE_HOST"));
+		String namenode = String.format("hdfs://%s:50070", System.getenv("NAMENODE_SERVICE_HOST"));
 		
 		Configuration configuration = new Configuration();
 		try {
 			FileSystem hdfs = FileSystem.get( new URI(
 					namenode), configuration );
+			System.out.println(hdfs.getStatus().getRemaining());
 		} catch (IOException | URISyntaxException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -40,7 +41,7 @@ public class SparkApp {
 		receiverStream.foreachRDD( new Function2<JavaRDD<String>, Time, Void>() {
 		      @Override
 		      public Void call(JavaRDD<String> rdd, Time time) {
-		    	  rdd.saveAsTextFile(namenode + "/user/hdfs/output.txt");
+		    	  rdd.saveAsTextFile(String.format("hdfs://%s:50070", System.getenv("NAMENODE_SERVICE_HOST")) + "/user/hdfs/output.txt");
 
 		    	  return null;
 		    

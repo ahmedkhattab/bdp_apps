@@ -6,16 +6,20 @@ import java.net.URISyntaxException;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.function.Function2;
 import org.apache.spark.SparkConf;
 import org.apache.spark.streaming.mqtt.MQTTUtils;
 import org.apache.spark.streaming.Duration;
+import org.apache.spark.streaming.Time;
 import org.apache.spark.streaming.api.java.JavaReceiverInputDStream;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
 
 public class SparkApp {
 	public static void main(String[] args) {
 		
-		String namenode = String.format("hdfs://%s:50070", System.getenv("NAMENODE_SERVICE_HOST"));
+		final String namenode = String.format("hdfs://%s:50070", System.getenv("NAMENODE_SERVICE_HOST"));
 		
 		Configuration configuration = new Configuration();
 		try {
@@ -33,7 +37,15 @@ public class SparkApp {
 		JavaStreamingContext ssc = new JavaStreamingContext(conf, new Duration(1000));
 		JavaReceiverInputDStream<String> receiverStream = MQTTUtils.createStream(ssc, rabbitmq_address, "s1",
 				org.apache.spark.storage.StorageLevel.MEMORY_ONLY());
-		receiverStream.print();
+		receiverStream.foreachRDD( new Function2<JavaRDD<String>, Time, Void>() {
+		      @Override
+		      public Void call(JavaRDD<String> rdd, Time time) {
+		    	  rdd.saveAsTextFile(namenode + "/user/hdfs/output.txt");
+
+		    	  return null;
+		    
+		      }
+		    });
 		ssc.start();
 		ssc.awaitTermination();
 		ssc.stop();

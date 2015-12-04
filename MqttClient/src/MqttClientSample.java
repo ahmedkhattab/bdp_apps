@@ -22,7 +22,7 @@ public class MqttClientSample {
 	public static void main(String[] args) {
 		String[] devices = {"s1", "s2"};
 		int qos = 1;
-		String broker = String.format("tcp://52.29.211.135:31315");
+		String broker = String.format("tcp://52.29.104.179:31315");
 		String clientId = "JavaSample";
 		MemoryPersistence persistence = new MemoryPersistence();
 
@@ -33,13 +33,12 @@ public class MqttClientSample {
 			System.out.println("Connecting to broker: " + broker);
 			sampleClient.connect(connOpts);
 			System.out.println("Connected");
-			for (int i = 0; i < 50; i++) {
+			for (int i = 0; i < 350; i++) {
 				System.out.println("Publishing message: " + getNewReading(devices[i%2]));
 				MqttMessage message = new MqttMessage(getNewReading(devices[i%2]).toString().getBytes());
 				message.setQos(qos);
 				sampleClient.publish(devices[i%2], message);
 				System.out.println("Message published");
-				Thread.sleep(1000);
 			}
 			sampleClient.disconnect();
 			System.out.println("Disconnected");
@@ -51,9 +50,6 @@ public class MqttClientSample {
 			System.out.println("cause " + me.getCause());
 			System.out.println("excep " + me);
 			me.printStackTrace();
-		} catch (InterruptedException e) {
-			System.out.println("reason " + e.getMessage());
-			e.printStackTrace();
 		}
 	}
 }

@@ -25,9 +25,7 @@ public class SparkApp {
 		try {
 			FileSystem hdfs = FileSystem.get( new URI(
 					namenode), configuration );
-			System.out.println(hdfs.getStatus().getRemaining());
 		} catch (IOException | URISyntaxException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 				
@@ -41,8 +39,8 @@ public class SparkApp {
 		receiverStream.foreachRDD( new Function2<JavaRDD<String>, Time, Void>() {
 		      @Override
 		      public Void call(JavaRDD<String> rdd, Time time) {
-		    	  rdd.saveAsTextFile(String.format("hdfs://%s:8020", System.getenv("NAMENODE_SERVICE_HOST")) + "/user/hdfs/output.txt");
-
+		    	  if(!rdd.isEmpty())
+		    		  rdd.saveAsTextFile(String.format("hdfs://%s:8020", System.getenv("NAMENODE_SERVICE_HOST")) + "/user/hdfs/output.txt");
 		    	  return null;
 		    
 		      }

@@ -28,7 +28,9 @@ public class HdfsClient {
 					configuration.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
 					configuration.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());
 
-					FileSystem fs = FileSystem.get(new URI("hdfs://52.59.247.68:32621"), configuration);
+					String namenode = String.format("hdfs://%s:8020", System.getenv("NAMENODE_SERVICE_HOST"));
+
+					FileSystem fs = FileSystem.get(new URI(namenode), configuration);
 
 					OutputStream out = fs.create(new Path("/user/hdfs/test"));
 

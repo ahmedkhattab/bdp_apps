@@ -314,3 +314,55 @@ DEBUG Thread-3 org.apache.hadoop.ipc.Client - stopping actual client because no 
 DEBUG Thread-3 org.apache.hadoop.ipc.Client - Stopping client
 DEBUG IPC Client (559587226) connection to /52.59.247.68:32621 from hdfs org.apache.hadoop.ipc.Client - IPC Client (559587226) connection to /52.59.247.68:32621 from hdfs: closed
 DEBUG IPC Client (559587226) connection to /52.59.247.68:32621 from hdfs org.apache.hadoop.ipc.Client - IPC Client (559587226) connection to /52.59.247.68:32621 from hdfs: stopped, remaining connections 0
+DEBUG main org.apache.hadoop.metrics2.lib.MutableMetricsFactory - field org.apache.hadoop.metrics2.lib.MutableRate org.apache.hadoop.security.UserGroupInformation$UgiMetrics.loginSuccess with annotation @org.apache.hadoop.metrics2.annotation.Metric(value=[Rate of successful kerberos logins and latency (milliseconds)], about=, valueName=Time, type=DEFAULT, always=false, sampleName=Ops)
+DEBUG main org.apache.hadoop.metrics2.lib.MutableMetricsFactory - field org.apache.hadoop.metrics2.lib.MutableRate org.apache.hadoop.security.UserGroupInformation$UgiMetrics.loginFailure with annotation @org.apache.hadoop.metrics2.annotation.Metric(value=[Rate of failed kerberos logins and latency (milliseconds)], about=, valueName=Time, type=DEFAULT, always=false, sampleName=Ops)
+DEBUG main org.apache.hadoop.metrics2.lib.MutableMetricsFactory - field org.apache.hadoop.metrics2.lib.MutableRate org.apache.hadoop.security.UserGroupInformation$UgiMetrics.getGroups with annotation @org.apache.hadoop.metrics2.annotation.Metric(value=[GetGroups], about=, valueName=Time, type=DEFAULT, always=false, sampleName=Ops)
+DEBUG main org.apache.hadoop.metrics2.impl.MetricsSystemImpl - UgiMetrics, User and group related metrics
+DEBUG main org.apache.hadoop.security.authentication.util.KerberosName - Kerberos krb5 configuration not found, setting default realm to empty
+DEBUG main org.apache.hadoop.security.UserGroupInformation - PrivilegedAction as:hdfs (auth:SIMPLE) from:com.hdfs.client.HdfsClient.main(HdfsClient.java:23)
+DEBUG main org.apache.hadoop.util.Shell - Failed to detect a valid hadoop home directory
+java.io.IOException: HADOOP_HOME or hadoop.home.dir are not set.
+	at org.apache.hadoop.util.Shell.checkHadoopHome(Shell.java:314)
+	at org.apache.hadoop.util.Shell.<clinit>(Shell.java:339)
+	at org.apache.hadoop.util.StringUtils.<clinit>(StringUtils.java:79)
+	at org.apache.hadoop.fs.FileSystem$Cache$Key.<init>(FileSystem.java:2806)
+	at org.apache.hadoop.fs.FileSystem$Cache$Key.<init>(FileSystem.java:2802)
+	at org.apache.hadoop.fs.FileSystem$Cache.get(FileSystem.java:2668)
+	at org.apache.hadoop.fs.FileSystem.get(FileSystem.java:371)
+	at com.hdfs.client.HdfsClient$1.run(HdfsClient.java:33)
+	at com.hdfs.client.HdfsClient$1.run(HdfsClient.java:23)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javax.security.auth.Subject.doAs(Subject.java:415)
+	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1657)
+	at com.hdfs.client.HdfsClient.main(HdfsClient.java:23)
+DEBUG main org.apache.hadoop.util.Shell - setsid exited with exit code 0
+DEBUG main org.apache.hadoop.hdfs.BlockReaderLocal - dfs.client.use.legacy.blockreader.local = false
+DEBUG main org.apache.hadoop.hdfs.BlockReaderLocal - dfs.client.read.shortcircuit = false
+DEBUG main org.apache.hadoop.hdfs.BlockReaderLocal - dfs.client.domain.socket.data.traffic = false
+DEBUG main org.apache.hadoop.hdfs.BlockReaderLocal - dfs.domain.socket.path = 
+DEBUG main org.apache.hadoop.metrics2.lib.MutableMetricsFactory - field org.apache.hadoop.metrics2.lib.MutableRate org.apache.hadoop.security.UserGroupInformation$UgiMetrics.loginSuccess with annotation @org.apache.hadoop.metrics2.annotation.Metric(valueName=Time, value=[Rate of successful kerberos logins and latency (milliseconds)], about=, always=false, type=DEFAULT, sampleName=Ops)
+DEBUG main org.apache.hadoop.metrics2.lib.MutableMetricsFactory - field org.apache.hadoop.metrics2.lib.MutableRate org.apache.hadoop.security.UserGroupInformation$UgiMetrics.loginFailure with annotation @org.apache.hadoop.metrics2.annotation.Metric(valueName=Time, value=[Rate of failed kerberos logins and latency (milliseconds)], about=, always=false, type=DEFAULT, sampleName=Ops)
+DEBUG main org.apache.hadoop.metrics2.lib.MutableMetricsFactory - field org.apache.hadoop.metrics2.lib.MutableRate org.apache.hadoop.security.UserGroupInformation$UgiMetrics.getGroups with annotation @org.apache.hadoop.metrics2.annotation.Metric(valueName=Time, value=[GetGroups], about=, always=false, type=DEFAULT, sampleName=Ops)
+DEBUG main org.apache.hadoop.metrics2.impl.MetricsSystemImpl - UgiMetrics, User and group related metrics
+DEBUG main org.apache.hadoop.security.authentication.util.KerberosName - Kerberos krb5 configuration not found, setting default realm to empty
+DEBUG main org.apache.hadoop.security.UserGroupInformation - PrivilegedAction as:hdfs (auth:SIMPLE) from:com.hdfs.client.HdfsClient.main(HdfsClient.java:23)
+DEBUG main org.apache.hadoop.util.Shell - Failed to detect a valid hadoop home directory
+java.io.IOException: HADOOP_HOME or hadoop.home.dir are not set.
+	at org.apache.hadoop.util.Shell.checkHadoopHome(Shell.java:314)
+	at org.apache.hadoop.util.Shell.<clinit>(Shell.java:339)
+	at org.apache.hadoop.util.StringUtils.<clinit>(StringUtils.java:79)
+	at org.apache.hadoop.fs.FileSystem$Cache$Key.<init>(FileSystem.java:2806)
+	at org.apache.hadoop.fs.FileSystem$Cache$Key.<init>(FileSystem.java:2802)
+	at org.apache.hadoop.fs.FileSystem$Cache.get(FileSystem.java:2668)
+	at org.apache.hadoop.fs.FileSystem.get(FileSystem.java:371)
+	at com.hdfs.client.HdfsClient$1.run(HdfsClient.java:33)
+	at com.hdfs.client.HdfsClient$1.run(HdfsClient.java:23)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javax.security.auth.Subject.doAs(Subject.java:415)
+	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1657)
+	at com.hdfs.client.HdfsClient.main(HdfsClient.java:23)
+DEBUG main org.apache.hadoop.util.Shell - setsid exited with exit code 0
+DEBUG main org.apache.hadoop.hdfs.BlockReaderLocal - dfs.client.use.legacy.blockreader.local = false
+DEBUG main org.apache.hadoop.hdfs.BlockReaderLocal - dfs.client.read.shortcircuit = false
+DEBUG main org.apache.hadoop.hdfs.BlockReaderLocal - dfs.client.domain.socket.data.traffic = false
+DEBUG main org.apache.hadoop.hdfs.BlockReaderLocal - dfs.domain.socket.path = 

@@ -8,14 +8,12 @@
 		<resources>
 			<resource>
 				<directory>src</directory>
-				<targetPath>src</targetPath>
 				<includes>
 					<include>text-input.txt</include>
 				</includes>
 			</resource>
 			<resource>
 				<directory>src</directory>
-				<targetPath>src</targetPath>
 				<includes>
 					<include>log4j.properties</include>
 				</includes>

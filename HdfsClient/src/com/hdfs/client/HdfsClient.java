@@ -15,7 +15,7 @@ import org.apache.hadoop.fs.FileStatus;
 
 public class HdfsClient {
 
-	public static void main(String args[]) {
+	public static void main(final String args[]) {
 
 		try {
 			UserGroupInformation ugi = UserGroupInformation.createRemoteUser("hdfs");
@@ -34,7 +34,7 @@ public class HdfsClient {
 
 					OutputStream out = fs.create(new Path("/user/hdfs/test"));
 
-					InputStream in = new BufferedInputStream(new FileInputStream("text-input.txt"));
+					InputStream in = new BufferedInputStream(new FileInputStream(args [0]));
 
 					// Get configuration of Hadoop system
 					Configuration conf = new Configuration();

@@ -22,7 +22,7 @@ public class MqttClientSample {
 	public static void main(String[] args) {
 		String[] devices = {"s1", "s2"};
 		int qos = 1;
-		String broker = String.format("tcp://52.29.104.179:31315");
+		String broker = String.format("tcp://52.29.13.197:31315");
 		String clientId = "JavaSample";
 		MemoryPersistence persistence = new MemoryPersistence();
 

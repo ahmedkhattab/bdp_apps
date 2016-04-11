@@ -32,7 +32,7 @@ public class HdfsClient {
 
 					FileSystem fs = FileSystem.get(new URI(namenode), configuration);
 
-					OutputStream out = fs.create(new Path("/user/hdfs/test"));
+					OutputStream out = fs.create(new Path("/user/hdfs/wordcount"));
 
 					InputStream in = new BufferedInputStream(new FileInputStream(args [0]));
 

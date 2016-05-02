@@ -40,7 +40,8 @@ public final class SparkWordCount {
 
     SparkConf sparkConf = new SparkConf().setAppName("JavaWordCount");
     JavaSparkContext ctx = new JavaSparkContext(sparkConf);
-    JavaRDD<String> lines = ctx.textFile(args[0], 1);
+    String namenode = String.format("hdfs://%s:8020", System.getenv("NAMENODE_SERVICE_HOST"));
+    JavaRDD<String> lines = ctx.textFile(namenode+args[0], 1);
  // create Spark context with Spark configuration
 
     // get threshold

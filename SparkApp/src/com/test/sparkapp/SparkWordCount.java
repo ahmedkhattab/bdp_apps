@@ -41,14 +41,13 @@ public final class SparkWordCount {
     SparkConf sparkConf = new SparkConf().setAppName("JavaWordCount");
     JavaSparkContext ctx = new JavaSparkContext(sparkConf);
     String namenode = String.format("hdfs://%s:8020", System.getenv("NAMENODE_SERVICE_HOST"));
-    JavaRDD<String> lines = ctx.textFile(namenode+args[0], 1);
  // create Spark context with Spark configuration
 
     // get threshold
     final int threshold = Integer.parseInt(args[1]);
 
     // read in text file and split each document into words
-    JavaRDD<String> tokenized = ctx.textFile(args[0]).flatMap(
+    JavaRDD<String> tokenized = ctx.textFile(namenode+args[0]).flatMap(
     		new FlatMapFunction<String, String>()  {
         public Iterable call(String s) {
           return Arrays.asList(s.split(" "));
@@ -109,6 +108,6 @@ public final class SparkWordCount {
     );
 
     System.out.println(charCounts.collect());
-  
+    charCounts.saveAsTextFile(namenode+args[0]+"_output");
   }
 }

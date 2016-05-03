@@ -42,79 +42,63 @@ public class SparkWordCount implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public static void main(final String[] args) {
-		try {
-			UserGroupInformation ugi = UserGroupInformation.createRemoteUser("hdfs");
 
-			ugi.doAs(new PrivilegedExceptionAction<Void>() {
+		SparkConf sparkConf = new SparkConf().setAppName("JavaWordCount").setIfMissing("spark.master", "local[*]");
+		JavaSparkContext ctx = new JavaSparkContext(sparkConf);
+		String namenode = String.format("hdfs://%s:8020", System.getenv("NAMENODE_SERVICE_HOST"));
+		// create Spark context with Spark configuration
 
-				public Void run() throws Exception {
-					SparkConf sparkConf = new SparkConf().setAppName("JavaWordCount");
-					JavaSparkContext ctx = new JavaSparkContext(sparkConf);
-					String namenode = String.format("hdfs://%s:8020", System.getenv("NAMENODE_SERVICE_HOST"));
-					// create Spark context with Spark configuration
+		// get threshold
+		final int threshold = Integer.parseInt(args[1]);
 
-					// get threshold
-					final int threshold = Integer.parseInt(args[1]);
+		// read in text file and split each document into words
+		JavaRDD<String> tokenized = ctx.textFile(namenode + args[0]).flatMap(new FlatMapFunction<String, String>() {
+			public Iterable call(String s) {
+				return Arrays.asList(s.split(" "));
+			}
+		});
 
-					// read in text file and split each document into words
-					JavaRDD<String> tokenized = ctx.textFile(namenode + args[0])
-							.flatMap(new FlatMapFunction<String, String>() {
-						public Iterable call(String s) {
-							return Arrays.asList(s.split(" "));
+		// count the occurrence of each word
+		JavaPairRDD<String, Integer> counts = tokenized.mapToPair(new PairFunction<String, String, Integer>() {
+			public Tuple2 call(String s) {
+				return new Tuple2(s, 1);
+			}
+		}).reduceByKey(new Function2<Integer, Integer, Integer>() {
+			public Integer call(Integer i1, Integer i2) {
+				return i1 + i2;
+			}
+		});
+
+		// filter out words with fewer than threshold occurrences
+		JavaPairRDD<String, Integer> filtered = counts.filter(new Function<Tuple2<String, Integer>, Boolean>() {
+			public Boolean call(Tuple2<String, Integer> tup) {
+				return tup._2 >= threshold;
+			}
+		});
+
+		// count characters
+		JavaPairRDD<Character, Integer> charCounts = filtered
+				.flatMap(new FlatMapFunction<Tuple2<String, Integer>, Character>() {
+					@Override
+					public Iterable<Character> call(Tuple2<String, Integer> s) {
+						ArrayList<Character> chars = new ArrayList<Character>(s._1().length());
+						for (char c : s._1().toCharArray()) {
+							chars.add(c);
 						}
-					});
+						return chars;
+					}
+				}).mapToPair(new PairFunction<Character, Character, Integer>() {
+					@Override
+					public Tuple2<Character, Integer> call(Character c) {
+						return new Tuple2<Character, Integer>(c, 1);
+					}
+				}).reduceByKey(new Function2<Integer, Integer, Integer>() {
+					@Override
+					public Integer call(Integer i1, Integer i2) {
+						return i1 + i2;
+					}
+				});
 
-					// count the occurrence of each word
-					JavaPairRDD<String, Integer> counts = tokenized
-							.mapToPair(new PairFunction<String, String, Integer>() {
-						public Tuple2 call(String s) {
-							return new Tuple2(s, 1);
-						}
-					}).reduceByKey(new Function2<Integer, Integer, Integer>() {
-						public Integer call(Integer i1, Integer i2) {
-							return i1 + i2;
-						}
-					});
-
-					// filter out words with fewer than threshold occurrences
-					JavaPairRDD<String, Integer> filtered = counts
-							.filter(new Function<Tuple2<String, Integer>, Boolean>() {
-						public Boolean call(Tuple2<String, Integer> tup) {
-							return tup._2 >= threshold;
-						}
-					});
-
-					// count characters
-					JavaPairRDD<Character, Integer> charCounts = filtered
-							.flatMap(new FlatMapFunction<Tuple2<String, Integer>, Character>() {
-						@Override
-						public Iterable<Character> call(Tuple2<String, Integer> s) {
-							ArrayList<Character> chars = new ArrayList<Character>(s._1().length());
-							for (char c : s._1().toCharArray()) {
-								chars.add(c);
-							}
-							return chars;
-						}
-					}).mapToPair(new PairFunction<Character, Character, Integer>() {
-						@Override
-						public Tuple2<Character, Integer> call(Character c) {
-							return new Tuple2<Character, Integer>(c, 1);
-						}
-					}).reduceByKey(new Function2<Integer, Integer, Integer>() {
-						@Override
-						public Integer call(Integer i1, Integer i2) {
-							return i1 + i2;
-						}
-					});
-
-					System.out.println(charCounts.collect());
-					charCounts.saveAsTextFile(namenode + args[0] + "_output");
-					return null;
-
-				}
-			});
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		System.out.println(charCounts.collect());
 	}
 }

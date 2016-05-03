@@ -32,14 +32,10 @@ import org.apache.spark.api.java.function.PairFunction;
 import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.regex.Pattern;
 
 public final class SparkWordCount {
-	private static final Pattern SPACE = Pattern.compile(" ");
 
-	public static void main(final String[] args) throws Exception {
+	public static void main(final String[] args) {
 		try {
 			UserGroupInformation ugi = UserGroupInformation.createRemoteUser("hdfs");
 
@@ -87,7 +83,7 @@ public final class SparkWordCount {
 							.flatMap(new FlatMapFunction<Tuple2<String, Integer>, Character>() {
 						@Override
 						public Iterable<Character> call(Tuple2<String, Integer> s) {
-							Collection<Character> chars = new ArrayList<Character>(s._1().length());
+							ArrayList<Character> chars = new ArrayList<Character>(s._1().length());
 							for (char c : s._1().toCharArray()) {
 								chars.add(c);
 							}

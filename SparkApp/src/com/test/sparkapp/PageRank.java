@@ -87,20 +87,20 @@ public final class PageRank {
 
     // Calculates and updates URL ranks continuously using PageRank algorithm.
     for (int current = 0; current < Integer.parseInt(args[1]); current++) {
-      // Calculates URL contributions to the rank of other URLs.
-      JavaPairRDD<String, Double> contribs = links.join(ranks).values()
-        .flatMapToPair(new PairFlatMapFunction<Tuple2<Iterable<String>, Double>, String, Double>() {
-          @Override
-          public Iterable<Tuple2<String, Double>> call(Tuple2<Iterable<String>, Double> s) {
-            int urlCount = Iterables.size(s._1);
-            List<Tuple2<String, Double>> results = new ArrayList<>();
-            for (String n : s._1) {
-              results.add(new Tuple2<>(n, s._2() / urlCount));
+        // Calculates URL contributions to the rank of other URLs.
+        JavaPairRDD<String, Double> contribs = links.join(ranks).values()
+          .flatMapToPair(new PairFlatMapFunction<Tuple2<Iterable<String>, Double>, String, Double>() {
+            @Override
+            public Iterable<Tuple2<String, Double>> call(Tuple2<Iterable<String>, Double> s) {
+              int urlCount = Iterables.size(s._1);
+              List<Tuple2<String, Double>> results = new ArrayList<Tuple2<String, Double>>();
+              for (String n : s._1) {
+                results.add(new Tuple2<String, Double>(n, s._2() / urlCount));
+              }
+              return results;
             }
-            return results;
-          }
-      });
-
+        });
+        
       // Re-calculates URL ranks based on neighbor contributions.
       ranks = contribs.reduceByKey(new Sum()).mapValues(new Function<Double, Double>() {
         @Override

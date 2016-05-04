@@ -50,7 +50,7 @@ public class HdfsClient {
 				        OutputStream outHDFS = fs.create(new Path("/user/hdfs/pagerank"));
 					    
 					    
-					    InputStream inHDFS = new BufferedInputStream(new FileInputStream(destDirectory+"/"+destDirectory));
+					    InputStream inHDFS = new BufferedInputStream(new FileInputStream(destDirectory+"/web-Google.txt"));
 				        
 					// Get configuration of Hadoop system
 					Configuration conf = new Configuration();

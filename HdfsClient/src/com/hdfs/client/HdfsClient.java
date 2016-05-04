@@ -1,10 +1,16 @@
 package com.hdfs.client;
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.security.PrivilegedExceptionAction;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.ZipInputStream;
 
 import org.apache.hadoop.conf.*;
 import org.apache.hadoop.security.UserGroupInformation;
@@ -32,9 +38,11 @@ public class HdfsClient {
 
 					FileSystem fs = FileSystem.get(new URI(namenode), configuration);
 
-					OutputStream out = fs.create(new Path("/user/hdfs/wordcount"));
+									 
+					 
+					    final ZipInputStream in = new ZipInputStream(new FileInputStream(args [0]));
+					    OutputStream out = fs.create(new Path("/user/hdfs/pagerank"));
 
-					InputStream in = new BufferedInputStream(new FileInputStream(args [0]));
 
 					// Get configuration of Hadoop system
 					Configuration conf = new Configuration();
@@ -42,7 +50,6 @@ public class HdfsClient {
 
 					// Copy file from local to HDFS
 					IOUtils.copyBytes(in, out, 4096, true);
-
 					FileStatus[] status = fs.listStatus(new Path("/user/hdfs"));
 					for (int i = 0; i < status.length; i++) {
 						System.out.println(status[i].getPath());

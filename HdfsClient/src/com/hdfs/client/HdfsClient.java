@@ -12,7 +12,6 @@ import java.security.PrivilegedExceptionAction;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
@@ -51,7 +50,7 @@ public class HdfsClient {
 				        OutputStream outHDFS = fs.create(new Path("/user/hdfs/pagerank"));
 					    
 					    
-					    InputStream inHDFS = new BufferedInputStream(new FileInputStream(args [0].substring(0, args[0].length()-3)));
+					    InputStream inHDFS = new BufferedInputStream(new FileInputStream(destDirectory+"/"+destDirectory));
 				        
 					// Get configuration of Hadoop system
 					Configuration conf = new Configuration();

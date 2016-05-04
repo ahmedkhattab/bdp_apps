@@ -77,12 +77,12 @@ public class SparkWordCount implements Serializable {
 		});
 
 		// count characters
-		JavaPairRDD<Character, Integer> charCounts = counts
-				.flatMap(new FlatMapFunction<Tuple2<String, Integer>, Character>() {
+		JavaPairRDD<Character, Integer> charCounts = tokenized
+				.flatMap(new FlatMapFunction<String, Character>() {
 					@Override
-					public Iterable<Character> call(Tuple2<String, Integer> s) {
-						ArrayList<Character> chars = new ArrayList<Character>(s._1().length());
-						for (char c : s._1().toCharArray()) {
+					public Iterable<Character> call(String s) {
+						ArrayList<Character> chars = new ArrayList<Character>(s.length());
+						for (char c : s.toCharArray()) {
 							chars.add(c);
 						}
 						return chars;

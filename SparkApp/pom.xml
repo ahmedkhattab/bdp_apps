@@ -43,7 +43,7 @@
 		        <archive>
 		          <manifest>
 		           <addClasspath>true</addClasspath>
-		            <mainClass>com.test.sparkapp.SparkWordCount</mainClass>
+		            <mainClass>com.test.sparkapp.PageRank</mainClass>
 		          </manifest>
 		        </archive>
 		        <descriptorRefs>

@@ -46,12 +46,7 @@ public final class PageRank {
 
 	public static void main(final String[] args) throws Exception {
 
-		try {
-			UserGroupInformation ugi = UserGroupInformation.createRemoteUser("hdfs");
-
-			ugi.doAs(new PrivilegedExceptionAction<Void>() {
-
-				public Void run() throws Exception {
+		
 
 					if (args.length < 2) {
 						System.err.println("Usage: JavaPageRank <file> <number_of_iterations>");
@@ -127,11 +122,6 @@ public final class PageRank {
 					}
 
 					ctx.stop();
-					return null;
-				}
-			});
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+				
 	}
 }
